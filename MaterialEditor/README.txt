@@ -1,6 +1,6 @@
-TMTK Material Editor - Distantz (2020) - Indev
+Material Editor - Distantz (2020) - Prerelease A
 
-Thank you for downloading a branch of the Material Editor.
+Thank you for downloading the Material Editor
 
 -----------------------------------------------------------------
 
@@ -9,5 +9,5 @@ If modifying or adding to the FBX list, simply just drop an FBX file into /progr
 For example objects to base uv mapped textures off, go to the /programFiles/models/examples/ folder.
 
 On export, all exports land in the Default output folder, unless specified, which is done in the settings menu in the top left.
-Documentation on the program can be found in the Help menu.
+Online/Local Documentation on the program can be found in the Help menu.
 
