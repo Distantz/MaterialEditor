@@ -15,10 +15,34 @@ class eventHandler():
             self.setup.exporter.finalExport(guiClass, self.setup.programFolder, self.setup)
 
         except IOError:
-            messagebox.showerror(title="Export cancelled", message="Error: IOError \n\n Do you have permission to create zips in this directory, or have an exported zip open?")
+            messagebox.showerror(title="Export cancelled", message="Error: IOError \n\n Do you have permission to create zips in this directory, have an exported zip open or is the output directory not valid?")
 
-        except Exception as BCMapProblemError:
-            messagebox.showerror(title="Export cancelled", message="Error: BCMapProblemError \n\n A Base Colour map is either missing, or is larger in one dimension than 1024.")
+        except ValueError as e:
+
+            errorType = str(e)
+
+            if errorType == "BCMapTooBig":
+
+                print("BCMapTooBig")
+                errMsg = "BCMapTooBig \n\n A Base Colour map is larger in one dimension than 1024."
+
+            elif errorType == "BCMapMissing":
+                print("BCMapMissing")
+                errMsg = "BCMapMissing \n\n A Base Colour map is missing in either the Trim or Main material."
+
+            elif errorType == "NoObjectInExport":
+                print("NoObjectInExport")
+                errMsg = "NoObjectInExport \n\n No objects are in the export queue."
+
+            elif errorType == "ProjectNameTooBig":
+                print("ProjectNameTooBig")
+                errMsg = "ProjectNameTooBig \n\n The project name exceeds 32 Characters, reduce the character size."
+
+            else:
+                errMsg = "Traceback: {} \n\n Hi, an abnormal error occured, please contact me with a screenshot of this error!".format(e)
+
+
+            messagebox.showerror(title="Export cancelled", message=errMsg)
 
         self.setup.exporter.deleteTempFolder(self.setup.programFolder)
 

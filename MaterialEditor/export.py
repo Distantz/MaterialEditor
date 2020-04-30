@@ -5,11 +5,6 @@ import time as time
 import math as math
 import shutil as shutil
 
-class BCMapProblem(Exception):
-
-    pass
-
-
 class export():
 
     def __init__(self, setup):
@@ -77,6 +72,13 @@ class export():
                 imgIcon = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
                 imgOverlay = PIL.Image.open("{}/programFiles/temp/main_BC.png".format(appFolder))
 
+                print(imgIcon.mode)
+                print(imgOverlay.mode)
+
+                imgOverlay = imgOverlay.convert("RGBA")
+
+                imgOverlay = imgOverlay.resize((512, 512), Image.ANTIALIAS)
+
                 img = PIL.ImageChops.multiply(imgIcon, imgOverlay)
 
             else:
@@ -95,6 +97,11 @@ class export():
                 name = guiClass.iconTextName.get()
 
                 fontSize = int(round(-0.4 * len(name) + 40, 0))
+
+                if fontSize < 1:
+
+                    fontSize = 1
+
 
                 fontToUse = PIL.ImageFont.truetype("{}/programFiles/Eagle-Bold.otf".format(appFolder), fontSize)
                 drawText(64, (20, 450), 2, guiClass.iconTextName.get(), (0,0,0), (255,255,255), fontToUse)
@@ -152,7 +159,6 @@ class export():
                         rnInvert(guiClass.invertRoughnessVar.get(), materialName, directoryList[x])
 
                     elif prefixList[x] == "_MT" or prefixList[x] == "_SM" or prefixList[x] == "_SP":
-
                         img = PIL.Image.open(directoryList[x]).convert("L")
                         img.save("{}/programFiles/temp/{}{}.png".format(appFolder, materialName, prefixList[x]))
 
@@ -164,13 +170,13 @@ class export():
 
                             if img.size[0] > 1024 or img.size[1] > 1024:
 
-                                raise BCMapProblem()
+                                raise ValueError("BCMapTooBig")
 
                         shutil.copy(directoryList[x], "{}/programFiles/temp/{}{}.png".format(appFolder, materialName, prefixList[x]))
                 else:
 
                     if prefixList[x] == "_BC":
-                        raise BCMapProblem()
+                        raise ValueError("BCMapMissing")
 
 
         def getPrefixes():
@@ -220,6 +226,9 @@ class export():
 
                 self.exportStack.append(self.setup.foundFiles[x])
 
+        if len(self.exportStack) < 1:
+            raise ValueError("NoObjectInExport")
+
 
         getPrefixes()
 
@@ -235,6 +244,11 @@ class export():
         useWallText = False
         useNameText = False
         useOverlay = False
+
+        name = guiClass.iconTextName.get()
+
+        if len(name) > 32:
+            raise ValueError("ProjectNameTooBig")
 
         if guiClass.iconUseWallText.get() == 1:
             useWallText = True

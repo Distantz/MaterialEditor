@@ -69,7 +69,7 @@ class Gui():
         menubar.add_cascade(label="Settings", menu=programmenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Online Documentation", command=lambda: webbrowser.open('https://www.youtube.com/channel/UCqg5Sh3Z8joVlll6drGufTg', new=2))
+        helpmenu.add_command(label="Online Documentation", command=lambda: webbrowser.open('https://docs.google.com/document/d/1Zdk48gJ4jZmqGXsTlGcDdyFwJZjbz7J16Y0mNmM5C1A', new=2))
         helpmenu.add_command(label="Local Documentation", command=lambda: os.system("notepad.exe " + "{}/README.txt".format(self.setup.programFolder)))
         helpmenu.add_separator()
         helpmenu.add_command(label=("Material Editor {} {}".format("v1.0", "- Distantz 2020")))
@@ -147,7 +147,7 @@ class Gui():
             self.exportSelectorFrame.grid_columnconfigure(0, weight=1)
             self.exportSelectorFrame.grid_columnconfigure(1, minsize=25)
 
-            self.exportSelectorOptionFrame = tk.LabelFrame(self.exportSelectFrame, text="Export options")
+            self.exportSelectorOptionFrame = tk.LabelFrame(self.exportSelectFrame, text="Export selection options:")
             self.exportSelectorOptionFrame.grid(row=1, column=0, sticky="nsew")
 
             self.exportSelectorOptionFrame.columnconfigure(3, weight=1, minsize=60)
@@ -237,15 +237,15 @@ class Gui():
             self.roughnessMapInverter.grid(row=0, column=1, sticky="nsw")
 
             ## Icon wall text checkbox
-            self.iconBCTextureCheckbutton = tk.Checkbutton(self.advancedOptionsFrame, text="Overlay BC texture onto icon", variable = self.iconOverlayBCTexture)
+            self.iconBCTextureCheckbutton = tk.Checkbutton(self.advancedOptionsFrame, text="Overlay BC Texture on icons", variable = self.iconOverlayBCTexture)
             self.iconBCTextureCheckbutton.grid(row=1, column=0, sticky="nsw")
 
             ## Icon wall text checkbox
-            self.iconWallTextCheckbutton = tk.Checkbutton(self.advancedOptionsFrame, text="Add wall name to icon", variable = self.iconUseWallText)
+            self.iconWallTextCheckbutton = tk.Checkbutton(self.advancedOptionsFrame, text="Add wall name to icons", variable = self.iconUseWallText)
             self.iconWallTextCheckbutton.grid(row=1, column=1, sticky="nsw")
 
             ## Icon name text checkbox
-            self.iconNameTextCheckbutton = tk.Checkbutton(self.projectNameFrame, text="Add project name to icon", variable = self.iconUseNameText)
+            self.iconNameTextCheckbutton = tk.Checkbutton(self.projectNameFrame, text="Add project name to icons", variable = self.iconUseNameText)
             self.iconNameTextCheckbutton.grid(row=0, column=0, sticky="nesw")
 
             ## Icon name text label
@@ -372,7 +372,7 @@ class Gui():
 
         if openDocumentation == "yes":
 
-            os.system("notepad.exe " + "{}/README.txt".format(self.setup.programFolder))
+            webbrowser.open('https://docs.google.com/document/d/1Zdk48gJ4jZmqGXsTlGcDdyFwJZjbz7J16Y0mNmM5C1A', new=2)
             self.root.state("normal")
 
         else:
