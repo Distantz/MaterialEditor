@@ -427,7 +427,7 @@ class Gui():
             widget : int
                 An integer that specifies the widget object
             disabled : bool
-                A bool, whether the entire frame should be disabled
+                A bool, whether the widget should be disabled
             """
 
             if disabled:
@@ -436,8 +436,8 @@ class Gui():
             else:
                 state = "normal"
 
-            for child in self.children[widget].frame.winfo_children():
-                child.configure(state=state)
+            self.children[widget].selector.configure(state=state)
+            self.children[widget].label.configure(state=state)
 
 
 
