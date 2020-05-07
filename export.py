@@ -61,6 +61,9 @@ class export():
             ## Brunt of the workload here.
             def drawText(iterations, position, offset, text, outlineColour, textColour, font):
 
+                guiClass.popupStage.configure(text="Rendering text: {}".format(text))
+                guiClass.popup.update()
+
                 for x in range(iterations):
                     draw.text((position[0] + math.sin(x) * offset, position[1] + math.cos(x) * offset ), text, outlineColour, font=font)
 
@@ -68,12 +71,12 @@ class export():
 
 
             if doOverlay:
+
+                guiClass.popupStage.configure(text="Overlaying")
+                guiClass.popup.update()
                 
                 imgIcon = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
                 imgOverlay = PIL.Image.open("{}/programFiles/temp/main_BC.png".format(appFolder))
-
-                print(imgIcon.mode)
-                print(imgOverlay.mode)
 
                 imgOverlay = imgOverlay.convert("RGBA")
 
@@ -88,7 +91,7 @@ class export():
 
             if doWall:
 
-                fontToUse = PIL.ImageFont.truetype("{}/programFiles/Eagle-Bold.otf".format(appFolder), 45)
+                fontToUse = PIL.ImageFont.truetype("{}/programFiles/Eagle-Bold.otf".format(appFolder), 40)
                 drawText(64, (20, 400), 2, wall, (0,0,0), (255,255,255), fontToUse)
 
 
@@ -112,6 +115,9 @@ class export():
 
         def rnInvert(doInvert, material, directory):
 
+            guiClass.popupStage.configure(text="Inverting Roughness")
+            guiClass.popup.update()
+
             if doInvert:
                 rnMap = PIL.Image.open(directory)
 
@@ -127,8 +133,9 @@ class export():
 
         def exportZippingHandler(fbxFile, doWallText, doNameText, doIconOverlay):
 
-
             zipName = os.path.splitext(fbxFile)[0]
+            guiClass.popupStage.configure(text="Cloning: {}".format(zipName))
+            guiClass.popup.update()
 
             if os.path.isfile("{}/programFiles/models/icons/{}.png".format(appFolder, zipName)):
 
@@ -139,6 +146,9 @@ class export():
                 shutil.copy("{}/programFiles/models/icons/default.png".format(appFolder), "{}/programFiles/temp/icon.png".format(appFolder))
 
             doImageEditing(doWallText, doNameText, doIconOverlay, zipName)
+
+            guiClass.popupStage.configure(text="Zipping: {}".format(zipName))
+            guiClass.popup.update()
 
             shutil.copy("{}/programFiles/models/fbx/{}".format(appFolder, fbxFile), "{}/programFiles/temp/{}".format(appFolder, fbxFile))
 
@@ -220,6 +230,7 @@ class export():
         except OSError:
             pass
 
+
         for x in range(len(guiClass.exportCBList)): 
 
             if guiClass.exportCBList[x].buttonVar.get() == 1:
@@ -260,10 +271,26 @@ class export():
             useOverlay = True
 
 
+        ## Calculate progress bar additions
+        progressExportQueueAddition = 100 / len(self.exportStack)
+        indexForProgress = 1
+
         for file in range(len(self.exportStack)):
+
+            guiClass.popupStage.configure(text="Zipping files")
+            guiClass.popup.update()
+
             exportZippingHandler(self.exportStack[file], useWallText, useNameText, useOverlay)
 
+            ## Do progress update
+            guiClass.popupProgress['value'] = progressExportQueueAddition * indexForProgress
+            guiClass.popup.update()
+            indexForProgress += 1
+
+        guiClass.popupStage.configure(text="Finished!")
+        guiClass.popup.update()
         os.startfile(self.setup.outputDirectory)
+
 
 
 

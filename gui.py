@@ -18,6 +18,8 @@ class Gui():
         ## Tkinter Window Setup
         self.root = tk.Tk()
 
+        self.root.focus_set()
+
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
 
@@ -382,10 +384,37 @@ class Gui():
 
 
 
+    def createExportPopup(self):
 
+        self.root.state("iconic")
 
+        ## Prep screen stuff
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        
+        default_width = 300
+        default_height = 135
 
+        ## Create toplevel
+        self.popup = tk.Toplevel()
+        self.popup.geometry("{}x{}+{}+{}".format(default_width, default_height, int(screen_width / 2 - (default_width / 2)), int(screen_height / 2 - (default_height / 2))))
 
+        ## Create toplevel widgets
+        self.popupText = tk.Label(self.popup, text="Exporting... \n Your default directory will open on export finish.")
+        self.popupText.pack(pady=(10, 10))
+
+        self.popupStage = tk.Label(self.popup, text="Preparation")
+        self.popupStage.pack(expand=1)
+
+        self.popupProgress = ttk.Progressbar(self.popup, length = 100, mode = 'determinate')
+        self.popupProgress.pack(fill="x", expand=1, padx=(20, 20), pady=(0, 20))
+
+        ## Get focus and update the toplevel
+        self.popup.focus_get()
+
+        self.popup.resizable(0,0)
+
+        self.popup.update()
 
     ## This class is for creating 2x2 image frames. This is only called when the GUI is being set up or a specific image frame needs to be configured
     class imageTextureFrameClass():

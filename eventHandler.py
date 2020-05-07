@@ -1,5 +1,4 @@
 import tkinter as tk
-import threading
 from tkinter.filedialog import askopenfilename, askdirectory
 from tkinter import messagebox
 
@@ -9,13 +8,22 @@ class eventHandler():
 
         self.setup = setup
 
+
     def onExport(self, guiClass, setup):
 
         try:
+
+            guiClass.createExportPopup()
+
             self.setup.exporter.finalExport(guiClass, self.setup.programFolder, self.setup)
+            guiClass.popup.after(1000, guiClass.popup.destroy())
 
         except IOError:
+
+            guiClass.popup.destroy()
             messagebox.showerror(title="Export cancelled", message="Error: IOError \n\n Do you have permission to create zips in this directory, have an exported zip open or is the output directory not valid?")
+
+            guiClass.root.state("normal")
 
         except ValueError as e:
 
@@ -39,12 +47,16 @@ class eventHandler():
                 errMsg = "ProjectNameTooBig \n\n The project name exceeds 32 Characters, reduce the character size."
 
             else:
-                errMsg = "Traceback: {} \n\n Hi, an abnormal error occured, please contact me with a screenshot of this error!".format(e)
+                errMsg = "Traceback: {} \n\n An abnormal error occured, please contact me with a screenshot of this error!".format(e)
 
 
+            guiClass.popup.destroy()
             messagebox.showerror(title="Export cancelled", message=errMsg)
+            guiClass.root.state("normal")
 
+        guiClass.root.focus_force()
         self.setup.exporter.deleteTempFolder(self.setup.programFolder)
+
 
     def onPickOutputDirectory(self):
 
