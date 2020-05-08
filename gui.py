@@ -3,6 +3,7 @@ import PIL as PIL
 import os as os
 from tkinter import messagebox
 from tkinter import ttk
+from tkinter import font
 import webbrowser
 
 class Gui():
@@ -15,6 +16,7 @@ class Gui():
         self.PalleteLightGrey = "#dbdbdb"
         self.PalleteDarkGrey = "#bfbfbf"
 
+
         ## Tkinter Window Setup
         self.root = tk.Tk()
 
@@ -24,7 +26,7 @@ class Gui():
         screen_height = self.root.winfo_screenheight()
 
         default_width = 750
-        default_height = 750
+        default_height = 805
 
         self.root.geometry("{}x{}+{}+{}".format(default_width, default_height, int(screen_width / 2 - (default_width / 2)), int(screen_height / 2 - (default_height / 2))))
 
@@ -53,6 +55,10 @@ class Gui():
 
         ## Call GUI setup
         self.createMenu()
+
+        ## Define fonts
+        self.root.option_add("*Font", "microsoftsansserif 11")
+
         self.createFrames()
         self.createWidgets()
         self.createBinds()
@@ -106,9 +112,9 @@ class Gui():
             self.workflowOptionsFrame.grid(row=0, column=0, sticky="nsew")
             self.advancedOptionsFrame.grid(row=1, column=0, sticky="nsew", pady=(10,0))
             self.exportOptionStretch.grid(row=2, column=0, sticky="nsew")
-            self.projectNameFrame.grid(row=2, column=0, columnspan=2, sticky="nsew")
+            self.projectNameFrame.grid(row=2, column=1, sticky="nsew")
 
-            self.projectNameFrame.grid_columnconfigure(2, weight=1)
+            self.projectNameFrame.grid_columnconfigure(1, weight=1)
 
             self.exportOptionsMasterFrame.columnconfigure(0, weight=1)
             self.exportOptionsMasterFrame.grid_rowconfigure(0)
@@ -233,6 +239,8 @@ class Gui():
             self.iconUseNameText = tk.BooleanVar()
             self.iconOverlayBCTexture = tk.BooleanVar()
             self.iconTextName = tk.StringVar()
+            self.iconOverlayColour = tk.BooleanVar()
+            self.colourOverlay = ((255, 255, 255), "#F0F0F0")
 
             ## Roughness map inverter
             self.roughnessMapInverter = tk.Checkbutton(self.advancedOptionsFrame, text="Invert Roughness map", variable = self.invertRoughnessVar)
@@ -247,16 +255,24 @@ class Gui():
             self.iconWallTextCheckbutton.grid(row=1, column=1, sticky="nsw")
 
             ## Icon name text checkbox
-            self.iconNameTextCheckbutton = tk.Checkbutton(self.projectNameFrame, text="Add project name to icons", variable = self.iconUseNameText)
-            self.iconNameTextCheckbutton.grid(row=0, column=0, sticky="nesw")
+            self.iconNameTextCheckbutton = tk.Checkbutton(self.advancedOptionsFrame, text="Add project name to icons", variable = self.iconUseNameText)
+            self.iconNameTextCheckbutton.grid(row=2, column=0, sticky="nsw")
 
             ## Icon name text label
             self.iconNameTextLabel = tk.Label(self.projectNameFrame, text="Project name:")
-            self.iconNameTextLabel.grid(row=0, column=1, sticky="nesw", padx=(10, 5))
+            self.iconNameTextLabel.grid(row=0, column=0, sticky="nesw", padx=(10, 5))
 
             ## Icon Text Entry Widget
             self.iconTextEntry = tk.Entry(self.projectNameFrame, textvariable=self.iconTextName)
-            self.iconTextEntry.grid(row=0, column=2, sticky="nsew", padx=(5, 10))
+            self.iconTextEntry.grid(row=0, column=1, sticky="nsew", padx=(5, 10))
+
+            ## Colour Picker widgets
+            self.colourPickerCheckbox = tk.Checkbutton(self.advancedOptionsFrame, text="Overlay color onto icons", variable = self.iconOverlayColour)
+            self.colourPickerCheckbox.grid(row=3, column=0, sticky="nsw")
+
+            self.colourPickerButton = tk.Button(self.advancedOptionsFrame, text="Pick Color", command = lambda: self.onEvent.onColourOverlayChange(self), bg=self.colourOverlay[1])
+            self.colourPickerButton.grid(row=3, column=1, sticky="nsew", padx=(5, 5))
+
 
             ## Advanced main image frame
             self.advancedMainImageSelector = self.imageTextureFrameClass(self, self.advancedOptionsFrame, "Main advanced textures", ("AO:", "Emissive:", "Cavity:", "To be added...:"), self.setup.mainAdvancedDirs, (4,0))
@@ -399,11 +415,16 @@ class Gui():
         self.popup = tk.Toplevel()
         self.popup.geometry("{}x{}+{}+{}".format(default_width, default_height, int(screen_width / 2 - (default_width / 2)), int(screen_height / 2 - (default_height / 2))))
 
+        self.popup.option_add("*Font", "microsoftsansserif 10")
+
+        self.popup.iconbitmap(self.setup.programFolder + '//programFiles//icon.ico')
+        self.popup.title("Exporting zips...")
+
         ## Create toplevel widgets
         self.popupText = tk.Label(self.popup, text="Exporting... \n Your default directory will open on export finish.")
         self.popupText.pack(pady=(10, 10))
 
-        self.popupStage = tk.Label(self.popup, text="Preparation")
+        self.popupStage = tk.Label(self.popup, text="Preparation", font=('microsoftsansserif 11 bold'))
         self.popupStage.pack(expand=1)
 
         self.popupProgress = ttk.Progressbar(self.popup, length = 100, mode = 'determinate')

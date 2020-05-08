@@ -56,7 +56,7 @@ class export():
 
     def finalExport(self, guiClass, appFolder, setup):
 
-        def doImageEditing(doWall, doName, doOverlay, wall):
+        def doImageEditing(doWall, doName, doOverlay, doColour, wall):
 
             ## Brunt of the workload here.
             def drawText(iterations, position, offset, text, outlineColour, textColour, font):
@@ -70,7 +70,14 @@ class export():
                 draw.text((position[0], position[1]), text, textColour,font=font)
 
 
+            img = None
+
+            if not doOverlay and not doColour:
+                img = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
+
             if doOverlay:
+
+                imgIcon = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
 
                 guiClass.popupStage.configure(text="Overlaying")
                 guiClass.popup.update()
@@ -84,8 +91,16 @@ class export():
 
                 img = PIL.ImageChops.multiply(imgIcon, imgOverlay)
 
-            else:
-                img = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
+            if doColour:
+
+                if img == None:
+                    img = PIL.Image.open("{}/programFiles/temp/icon.png".format(appFolder))
+
+                imgColour = PIL.Image.new("RGBA", (512, 512), color = (int(round(guiClass.colourOverlay[0][0],0)), int(round(guiClass.colourOverlay[0][1],0)), int(round(guiClass.colourOverlay[0][2],0))))
+                imgColour.convert("RGBA")
+                
+                img = PIL.ImageChops.multiply(img, imgColour)
+
 
             draw = PIL.ImageDraw.Draw(img)
 
@@ -131,7 +146,7 @@ class export():
                 rnMap = PIL.Image.open(directory)
                 rnMap.save("{}/programFiles/temp/{}_RN.png".format(appFolder, material))
 
-        def exportZippingHandler(fbxFile, doWallText, doNameText, doIconOverlay):
+        def exportZippingHandler(fbxFile, doWallText, doNameText, doIconOverlay, doIconColour):
 
             zipName = os.path.splitext(fbxFile)[0]
             guiClass.popupStage.configure(text="Cloning: {}".format(zipName))
@@ -145,7 +160,7 @@ class export():
 
                 shutil.copy("{}/programFiles/models/icons/default.png".format(appFolder), "{}/programFiles/temp/icon.png".format(appFolder))
 
-            doImageEditing(doWallText, doNameText, doIconOverlay, zipName)
+            doImageEditing(doWallText, doNameText, doIconOverlay, doIconColour, zipName)
 
             guiClass.popupStage.configure(text="Zipping: {}".format(zipName))
             guiClass.popup.update()
@@ -255,6 +270,7 @@ class export():
         useWallText = False
         useNameText = False
         useOverlay = False
+        useColour = False
 
         name = guiClass.iconTextName.get()
 
@@ -270,6 +286,9 @@ class export():
         if guiClass.iconOverlayBCTexture.get() == 1:
             useOverlay = True
 
+        if guiClass.iconOverlayColour.get() == 1:
+            useColour = True
+
 
         ## Calculate progress bar additions
         progressExportQueueAddition = 100 / len(self.exportStack)
@@ -280,7 +299,7 @@ class export():
             guiClass.popupStage.configure(text="Zipping files")
             guiClass.popup.update()
 
-            exportZippingHandler(self.exportStack[file], useWallText, useNameText, useOverlay)
+            exportZippingHandler(self.exportStack[file], useWallText, useNameText, useOverlay, useColour)
 
             ## Do progress update
             guiClass.popupProgress['value'] = progressExportQueueAddition * indexForProgress

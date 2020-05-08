@@ -1,12 +1,24 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, askdirectory
 from tkinter import messagebox
+from tkinter import colorchooser
 
 class eventHandler():
     
     def __init__(self, setup):
 
         self.setup = setup
+
+    def onColourOverlayChange(self, guiClass):
+
+        tmpColour = colorchooser.askcolor(color=guiClass.colourOverlay[1])
+
+        print(tmpColour)
+
+        if tmpColour[1] != None:
+
+            guiClass.colourOverlay = tmpColour
+            guiClass.colourPickerButton.configure(bg=tmpColour[1])
 
 
     def onExport(self, guiClass, setup):
