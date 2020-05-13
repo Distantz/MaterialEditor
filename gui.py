@@ -228,7 +228,7 @@ class Gui():
             self.altNormalTickbox.grid(row=1, column=1, sticky="nsw")
 
             ## Flexicolour slider label
-            flexiLabel = tk.Label(self.flexiColourOptionFrame, text="Flexicolor:")
+            flexiLabel = tk.Label(self.flexiColourOptionFrame, text="Flexicolour:")
             flexiLabel.grid(row=0, column=0, sticky="nsew")
 
             ## Flexicolour slider
@@ -280,21 +280,21 @@ class Gui():
             self.iconTextEntry.grid(row=0, column=1, sticky="nsew", padx=(5, 10))
 
             ## Colour Picker widgets
-            self.colourPickerCheckbox = tk.Checkbutton(self.advancedOptionsFrame, text="Overlay color onto icons", variable = self.iconOverlayColour)
+            self.colourPickerCheckbox = tk.Checkbutton(self.advancedOptionsFrame, text="Overlay colour onto icons", variable = self.iconOverlayColour)
             self.colourPickerCheckbox.grid(row=3, column=0, sticky="nsw")
 
-            self.colourPickerButton = tk.Button(self.advancedOptionsFrame, text="Pick Color", command = lambda: self.onEvent.onColourOverlayChange(self), bg=self.colourOverlay[1])
+            self.colourPickerButton = tk.Button(self.advancedOptionsFrame, text="Pick Colour", command = lambda: self.onEvent.onColourOverlayChange(self), bg=self.colourOverlay[1])
             self.colourPickerButton.grid(row=3, column=1, sticky="nsew", padx=(5, 5))
 
 
             ## Advanced main image frame
-            self.advancedMainImageSelector = self.imageTextureFrameClass(self, self.advancedOptionsFrame, "Main advanced textures", ("AO:", "Emissive:", "Cavity:", "To be added...:"), self.setup.mainAdvancedDirs, (4,0))
+            self.advancedMainImageSelector = self.imageTextureFrameClass(self, self.advancedOptionsFrame, "Main advanced textures", ("AO:", "Emissive:", "Cavity:", ""), self.setup.mainAdvancedDirs, (4,0))
             self.advancedMainImageSelector.masterFrame.grid(row=4, column=0, columnspan=2, pady=(10,5))
             self.advancedMainImageSelector.masterFrame.configure(highlightthickness=0)
             self.advancedMainImageSelector.configure(3, True)
 
             ## Advanced trim image frame
-            self.advancedTrimImageSelector = self.imageTextureFrameClass(self, self.advancedOptionsFrame, "Trim advanced textures", ("AO:", "Emissive:", "Cavity:", "To be added...:"), self.setup.trimAdvancedDirs, (5,0))
+            self.advancedTrimImageSelector = self.imageTextureFrameClass(self, self.advancedOptionsFrame, "Trim advanced textures", ("AO:", "Emissive:", "Cavity:", ""), self.setup.trimAdvancedDirs, (5,0))
             self.advancedTrimImageSelector.masterFrame.grid(row=5, column=0, columnspan=2, pady=(5,10))
             self.advancedTrimImageSelector.masterFrame.configure(highlightthickness=0)
             self.advancedTrimImageSelector.configure(3, True)
@@ -304,8 +304,8 @@ class Gui():
 
             self.mainMaterialSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Main textures", ("Base Colour:", "Normal:", "Metalness:", "Roughness:"), self.setup.mainMaterialDirs, (0,0))
             self.trimMaterialSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Trim textures", ("Base Colour:", "Normal:", "Metalness:", "Roughness:"), self.setup.trimMaterialDirs, (2,0))
-            self.mainFlexiColourSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Main Flexicolour textures", ("Flexicolor 1:", "Flexicolor 2:", "Flexicolor 3:", "Flexicolor 4:"), self.setup.mainFlexiColourDirs, (4,0))
-            self.trimFlexiColourSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Trim Flexicolour textures", ("Flexicolor 1:", "Flexicolor 2:", "Flexicolor 3:", "Flexicolor 4:"), self.setup.trimFlexiColourDirs, (6,0))
+            self.mainFlexiColourSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Main Flexicolour textures", ("Flexicolour 1:", "Flexicolour 2:", "Flexicolour 3:", "Flexicolour 4:"), self.setup.mainFlexiColourDirs, (4,0))
+            self.trimFlexiColourSelector = self.imageTextureFrameClass(self, self.imageSelectFrame, "Trim Flexicolour textures", ("Flexicolour 1:", "Flexicolour 2:", "Flexicolour 3:", "Flexicolour 4:"), self.setup.trimFlexiColourDirs, (6,0))
 
             self.separator1 = tk.Frame(self.imageSelectFrame, bg=self.PalleteDarkGrey)
             self.separator2 = tk.Frame(self.imageSelectFrame, bg=self.PalleteDarkGrey)
