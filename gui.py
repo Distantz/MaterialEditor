@@ -34,6 +34,19 @@ class Gui():
 
         self.root.title("Material Editor {}".format("v1.0"))
 
+        def onClose():
+
+            onClose = messagebox.askquestion(title = "Material Editor", message ="Are you sure you want to quit?")
+
+            if (onClose == "yes"):
+                self.root.destroy()
+            else:
+                pass
+
+        self.root.protocol("WM_DELETE_WINDOW", onClose)
+
+
+
 
         ## Class referal variables
         self.setup = setup
@@ -391,11 +404,11 @@ class Gui():
         if openDocumentation == "yes":
 
             webbrowser.open('https://docs.google.com/document/d/1Zdk48gJ4jZmqGXsTlGcDdyFwJZjbz7J16Y0mNmM5C1A', new=2)
-            self.root.state("normal")
 
         else:
 
             self.root.wm_state("normal")
+            self.root.focus_force()
 
 
 
@@ -432,8 +445,13 @@ class Gui():
 
         ## Get focus and update the toplevel
         self.popup.focus_get()
-
         self.popup.resizable(0,0)
+
+        def preventClose():
+
+            pass
+
+        self.popup.protocol("WM_DELETE_WINDOW", preventClose)
 
         self.popup.update()
 
